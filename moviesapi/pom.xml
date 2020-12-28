@@ -10,7 +10,6 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>com.example</groupId>
     <artifactId>moviesapi</artifactId>
     <version>${revision}</version>
     <name>moviesapi</name>
@@ -39,11 +38,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
