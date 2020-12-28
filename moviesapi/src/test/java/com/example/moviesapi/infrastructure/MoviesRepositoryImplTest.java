@@ -27,6 +27,7 @@ class MoviesRepositoryImplTest {
 
     @BeforeEach
     public void setup(){
+        crudRepository.deleteAll();
         repo = new MoviesRepositoryImpl(crudRepository);
     }
 
