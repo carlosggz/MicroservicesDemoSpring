@@ -4,10 +4,14 @@ import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Voidy;
 import com.example.moviesapi.domain.MoviesRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 @AllArgsConstructor
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LikeHandler implements Command.Handler<LikeCommand, Boolean> {
 
     MoviesRepository repository;
