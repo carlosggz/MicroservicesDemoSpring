@@ -3,6 +3,7 @@ package com.example.moviesapi.controllers;
 import an.awesome.pipelinr.Pipeline;
 import com.example.moviesapi.application.GetMovieDetailsQuery;
 import com.example.moviesapi.application.GetMoviesQuery;
+import com.example.moviesapi.application.LikeCommand;
 import com.example.moviesapi.config.Constants;
 import com.example.moviesapi.objectmothers.MoviesObjectMother;
 import lombok.val;
@@ -27,6 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,5 +90,27 @@ class MoviesControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(entity.getId())));
+    }
+
+    @Test
+    void likeInvalidMovieReturns404() throws Exception {
+
+        val entity = MoviesObjectMother.getRandomEntity();
+        when(pipeline.send(any(LikeCommand.class))).thenReturn(false);
+
+        mockMvc
+                .perform(post(Constants.MOVIES_BASE_URL + "/" + entity.getId()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void likeValidMovieReturnsOk() throws Exception {
+
+        val entity = MoviesObjectMother.getRandomEntity();
+        when(pipeline.send(any(LikeCommand.class))).thenReturn(true);
+
+        mockMvc
+                .perform(post(Constants.MOVIES_BASE_URL + "/" + entity.getId()))
+                .andExpect(status().isOk());
     }
 }

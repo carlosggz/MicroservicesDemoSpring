@@ -5,6 +5,8 @@ import com.example.moviesapi.domain.MovieDto;
 import com.example.moviesapi.domain.MoviesRepository;
 import com.example.moviesapi.infrastructure.jpa.MoviesCrudRepository;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.val;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class MoviesRepositoryImpl implements MoviesRepository {
     }
 
     @Override
-    public Optional<Movie> getById(String id) {
+    public Optional<Movie> getById(@NonNull String id) {
 
         return (id == null || id.trim().length() == 0)
                 ? Optional.empty()
@@ -38,18 +40,9 @@ public class MoviesRepositoryImpl implements MoviesRepository {
     }
 
     @Override
-    public void like(String id) throws Exception {
+    public void save(@NonNull Movie movie){
 
-        if (id == null || id.trim().length() == 0)
-            throw new Exception("Invalid id");
-
-        var entity = repository.findById(id);
-
-        if (entity.isEmpty())
-            throw new Exception("Invalid id");
-
-        var movie = entity.get();
-        movie.setLikes(movie.getLikes()+1);
-        repository.save(movie);
+        val entity = MovieMapper.INSTANCE.toEntity(movie);
+        repository.save(entity);
     }
 }

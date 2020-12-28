@@ -1,5 +1,6 @@
 package com.example.moviesapi.infrastructure;
 
+import com.example.moviesapi.application.LikeCommand;
 import com.example.moviesapi.domain.Movie;
 import com.example.moviesapi.domain.MovieDto;
 import com.example.moviesapi.infrastructure.jpa.MovieEntity;
@@ -77,11 +78,12 @@ class MoviesRepositoryImplTest {
         val invalid  = repo.getById("123");
         assertTrue(invalid.isEmpty());
 
-        val nullItem = repo.getById(null);
-        assertTrue(nullItem.isEmpty());
-
         val emptyItem = repo.getById("");
         assertTrue(emptyItem.isEmpty());
+
+        assertThrows(Exception.class, () -> {
+            repo.getById(null);
+        });
     }
 
     @Test
@@ -99,31 +101,15 @@ class MoviesRepositoryImplTest {
     }
 
     @Test
-    public void likeNonExistingItemThrowsException() {
+    public void saveAddEntity() {
 
-        assertThrows(Exception.class, () -> {
-            repo.like(null);
-        });
+        val domainEntity = MoviesObjectMother.getRandomDomainEntity();
 
-        assertThrows(Exception.class, () -> {
-            repo.like("");
-        });
+        repo.save(domainEntity);
 
-        assertThrows(Exception.class, () -> {
-            repo.like("123");
-        });
-    }
+        val entity = crudRepository.getOne(domainEntity.getId());
 
-    @Test
-    public void likeExistingItemIncrementByOne() throws Exception {
-
-        val entity = MoviesObjectMother.getRandomEntity();
-        crudRepository.save(entity);
-
-        repo.like(entity.getId());
-
-        val changedEntity = crudRepository.getOne(entity.getId());
-
-        assertEquals(entity.getLikes()+1, changedEntity.getLikes());
+        assertNotNull(entity);
+        assertEquals(entity, MovieMapper.INSTANCE.toEntity(domainEntity));
     }
 }
