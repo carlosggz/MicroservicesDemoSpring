@@ -3,6 +3,7 @@ package com.example.moviesapi.application;
 import com.example.moviesapi.domain.MovieDto;
 import com.example.moviesapi.domain.MoviesRepository;
 import com.example.moviesapi.infrastructure.jpa.MovieEntity;
+import com.example.moviesapi.objectmothers.MoviesObjectMother;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,9 +54,9 @@ class GetMoviesHandlerTest {
     void handleReturnAllMovies() {
 
         val items = List.of(
-                new MovieDto("1", "First"),
-                new MovieDto("2", "Second"),
-                new MovieDto("3", "Third")
+                MoviesObjectMother.getRandomDto(),
+                MoviesObjectMother.getRandomDto(),
+                MoviesObjectMother.getRandomDto()
         );
         when(repository.getAll()).thenReturn(items);
 

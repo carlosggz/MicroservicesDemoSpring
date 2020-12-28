@@ -32,6 +32,7 @@
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <lombok.version>1.18.16</lombok.version>
         <pipeliner.version>0.5</pipeliner.version>
+        <faker.version>1.0.2</faker.version>
     </properties>
 
     <dependencies>
@@ -55,6 +56,11 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${faker.version}</version>
         </dependency>
     </dependencies>
 

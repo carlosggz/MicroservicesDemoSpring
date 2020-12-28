@@ -4,6 +4,7 @@ import com.example.moviesapi.domain.Movie;
 import com.example.moviesapi.domain.MovieDto;
 import com.example.moviesapi.infrastructure.jpa.MovieEntity;
 import com.example.moviesapi.infrastructure.jpa.MoviesCrudRepository;
+import com.example.moviesapi.objectmothers.MoviesObjectMother;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,10 +48,9 @@ class MoviesRepositoryImplTest {
     public void getAllReturnsAllItems(){
 
         val items = List.of(
-                new MovieEntity("1", "First", 0),
-                new MovieEntity("2", "Second", 0),
-                new MovieEntity("3", "Third", 0)
-        );
+                MoviesObjectMother.getRandomEntity(),
+                MoviesObjectMother.getRandomEntity(),
+                MoviesObjectMother.getRandomEntity());
 
         items.forEach(x -> crudRepository.save(x));
 
@@ -86,7 +86,7 @@ class MoviesRepositoryImplTest {
     @Test
     public void getByIdExistingItemReturnsIt(){
 
-        val entity = new MovieEntity("1", "First", 0);
+        val entity = MoviesObjectMother.getRandomEntity();
         crudRepository.save(entity);
 
         val found = repo.getById(entity.getId());
@@ -116,7 +116,7 @@ class MoviesRepositoryImplTest {
     @Test
     public void likeExistingItemIncrementByOne() throws Exception {
 
-        val entity = new MovieEntity("1", "First", 5);
+        val entity = MoviesObjectMother.getRandomEntity();
         crudRepository.save(entity);
 
         repo.like(entity.getId());
