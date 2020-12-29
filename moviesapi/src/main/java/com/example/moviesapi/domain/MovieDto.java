@@ -2,10 +2,8 @@ package com.example.moviesapi.domain;
 
 import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 public class MovieDto {
-    private String id;
-    private String title;
+    String id;
+    String title;
 }

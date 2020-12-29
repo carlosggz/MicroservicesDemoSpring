@@ -1,11 +1,7 @@
-package com.example.moviesapi.infrastructure;
+package com.example.actorsapi.infrastructure;
 
-import com.example.moviesapi.application.LikeCommand;
-import com.example.moviesapi.domain.Movie;
-import com.example.moviesapi.domain.MovieDto;
-import com.example.moviesapi.infrastructure.jpa.MovieEntity;
-import com.example.moviesapi.infrastructure.jpa.MoviesCrudRepository;
-import com.example.moviesapi.objectmothers.MoviesObjectMother;
+import com.example.actorsapi.infrastructure.jpa.ActorsCrudRepository;
+import com.example.actorsapi.objectmothers.ActorsObjectMother;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,30 +9,28 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class MoviesRepositoryImplTest {
+class ActorsRepositoryImplTest {
 
     @Autowired
-    private MoviesCrudRepository crudRepository;
+    ActorsCrudRepository crudRepository;
 
-    MoviesRepositoryImpl repo;
+    ActorsRepositoryImpl repo;
 
     @BeforeEach
     public void setup(){
         crudRepository.deleteAll();
-        repo = new MoviesRepositoryImpl(crudRepository);
+        repo = new ActorsRepositoryImpl(crudRepository);
     }
 
     @AfterEach
     public  void cleanUp(){
         repo = null;
     }
-
 
     @Test
     public void getAllReturnsNotNull() {
@@ -50,11 +44,12 @@ class MoviesRepositoryImplTest {
     public void getAllReturnsAllItems(){
 
         val items = List.of(
-                MoviesObjectMother.getRandomEntity(),
-                MoviesObjectMother.getRandomEntity(),
-                MoviesObjectMother.getRandomEntity());
+                ActorsObjectMother.getRandomEntity(),
+                ActorsObjectMother.getRandomEntity(),
+                ActorsObjectMother.getRandomEntity()
+        );
 
-        items.forEach(x -> crudRepository.save(x));
+        crudRepository.saveAll(items);
 
         val result = repo.getAll();
 
@@ -69,7 +64,6 @@ class MoviesRepositoryImplTest {
             assertTrue(found.isPresent());
             assertEquals(x.getId(), found.get().getId());
         });
-
     }
 
     @Test
@@ -89,25 +83,12 @@ class MoviesRepositoryImplTest {
     @Test
     public void getByIdExistingItemReturnsIt(){
 
-        val entity = MoviesObjectMother.getRandomEntity();
+        val entity = ActorsObjectMother.getRandomEntity();
         crudRepository.save(entity);
 
         val found = repo.getById(entity.getId());
 
         assertTrue(found.isPresent());
-        assertEquals(found.get(), MovieMapper.INSTANCE.toDomain(entity));
-    }
-
-    @Test
-    public void saveAddEntity() {
-
-        val domainEntity = MoviesObjectMother.getRandomDomainEntity();
-
-        repo.save(domainEntity);
-
-        val entity = crudRepository.getOne(domainEntity.getId());
-
-        assertNotNull(entity);
-        assertEquals(entity, MovieMapper.INSTANCE.toEntity(domainEntity));
+        assertEquals(ActorMapper.INSTANCE.toDomain(entity), found.get());
     }
 }

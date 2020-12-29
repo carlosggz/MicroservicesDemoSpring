@@ -8,6 +8,7 @@
     <modules>
         <module>shared</module>
         <module>moviesapi</module>
+        <module>actorsapi</module>
     </modules>
 
     <parent>
