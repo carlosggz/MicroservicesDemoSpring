@@ -1,13 +1,15 @@
 package com.example.moviesapi.application;
 
 import an.awesome.pipelinr.Command;
-import an.awesome.pipelinr.Voidy;
+import com.example.moviesapi.domain.LikeMovieDomainEvent;
 import com.example.moviesapi.domain.MoviesRepository;
+import com.example.shared.domain.EventBus;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Component
@@ -15,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class LikeHandler implements Command.Handler<LikeCommand, Boolean> {
 
     MoviesRepository repository;
+    EventBus eventBus;
 
     @Override
     public Boolean handle(LikeCommand command)  {
@@ -30,6 +33,8 @@ public class LikeHandler implements Command.Handler<LikeCommand, Boolean> {
         var entity = value.get();
         entity.setLikes(entity.getLikes()+1);
         repository.save(entity);
+
+        eventBus.publishToQueue(List.of(new LikeMovieDomainEvent(entity)));
 
         return true;
     }
