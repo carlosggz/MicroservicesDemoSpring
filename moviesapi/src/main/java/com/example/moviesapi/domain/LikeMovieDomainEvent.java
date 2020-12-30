@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor
 @Getter
@@ -16,7 +17,7 @@ public class LikeMovieDomainEvent extends DomainEvent {
     int likes;
 
     public LikeMovieDomainEvent(Movie movie){
-        super(Constants.LIKES_QUEUE, movie.getId(), LocalDateTime.now());
+        super(Constants.LIKES_QUEUE, movie.getId(), new Date());
         likes = movie.getLikes();
     }
 }

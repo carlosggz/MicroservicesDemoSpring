@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.BDDMockito.then;
@@ -25,7 +26,7 @@ class RabbitEventBusTest {
         public FakeEvent(
                 String eventId,
                 String aggregateRootId,
-                LocalDateTime occurrenceDate,
+                Date occurrenceDate,
                 String myProperty) {
             super(eventId, aggregateRootId, occurrenceDate);
             this.myProperty = myProperty;
@@ -51,9 +52,9 @@ class RabbitEventBusTest {
     void publishToQueueCallsAllItems() {
 
         val events = List.of(
-                new FakeEvent("ev1", "123", LocalDateTime.now(), "1"),
-                new FakeEvent("ev2", "123", LocalDateTime.now(), "1"),
-                new FakeEvent("ev3", "123", LocalDateTime.now(), "1")
+                new FakeEvent("ev1", "123", new Date(), "1"),
+                new FakeEvent("ev2", "123", new Date(), "1"),
+                new FakeEvent("ev3", "123", new Date(), "1")
         );
 
         eventBus.publishToQueue(events);
