@@ -1,6 +1,7 @@
 package com.example.moviesapi.application;
 
 import an.awesome.pipelinr.Command;
+import com.example.moviesapi.config.Constants;
 import com.example.moviesapi.domain.LikeMovieDomainEvent;
 import com.example.moviesapi.domain.MoviesRepository;
 import com.example.shared.domain.EventBus;
@@ -34,7 +35,7 @@ public class LikeHandler implements Command.Handler<LikeCommand, Boolean> {
         entity.setLikes(entity.getLikes()+1);
         repository.save(entity);
 
-        eventBus.publishToQueue(List.of(new LikeMovieDomainEvent(entity)));
+        eventBus.publishToQueue(List.of(new LikeMovieDomainEvent(Constants.LIKES_QUEUE, entity.getId(), entity.getLikes())));
 
         return true;
     }

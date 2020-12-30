@@ -1,39 +1,32 @@
 package com.example.actorsapi.config;
 
+import com.example.actorsapi.application.LikeMovieHandler;
+import com.example.actorsapi.domain.LikeMovieDomainEvent;
+import lombok.AllArgsConstructor;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.handler.annotation.Payload;
 
 @Configuration
+@AllArgsConstructor
 public class RabbitMQConfig {
 
-    /*
+    private final LikeMovieHandler likeMovieHandler;
+
     @Bean
-    Queue queue() {
-        return new Queue(Constants.LIKES_QUEUE, false);
+    Queue queue() { return new Queue(Constants.LIKES_QUEUE, false); }
+
+    @Bean
+    public MessageConverter messageConverter(){
+        return new Jackson2JsonMessageConverter();
     }
 
-	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange("spring-boot-exchange");
-	}
-
-	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(Constants.LIKES_QUEUE);
-	}
-
-	@Bean
-	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-	MessageListenerAdapter listenerAdapter) {
-		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames(Constants.LIKES_QUEUE);
-		container.setMessageListener(listenerAdapter);
-		return container;
-	}
-
-	@Bean
-	MessageListenerAdapter listenerAdapter(ProductMessageListener receiver) {
-		return new MessageListenerAdapter(receiver, "receiveMessage");
-	}
-    * */
+    @RabbitListener(queues = Constants.LIKES_QUEUE)
+    public void processLikeMovie(@Payload LikeMovieDomainEvent domainEvent) {
+        likeMovieHandler.handle(domainEvent);
+    }
 }

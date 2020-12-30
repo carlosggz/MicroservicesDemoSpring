@@ -91,4 +91,56 @@ class ActorsRepositoryImplTest {
         assertTrue(found.isPresent());
         assertEquals(ActorMapper.INSTANCE.toDomain(entity), found.get());
     }
+
+    @Test
+    public void getByMovieReturnMatching(){
+
+        val movieId = "xxx";
+        addActorWithMovie(movieId);
+        addActorWithMovie(movieId+"x");
+        addActorWithMovie(movieId);
+
+        val actors = repo.getByMovie(movieId);
+
+        assertEquals(2, actors.size());
+        actors.forEach(x -> assertTrue(x.getMovies().stream().anyMatch(movieId::equals)));
+    }
+
+    @Test
+    public void getByMovieReturnEmptyListOnNonMatching(){
+
+        val movieId = "xxx";
+        addActorWithMovie(movieId);
+        addActorWithMovie(movieId+"x");
+        addActorWithMovie(movieId);
+
+        val actors = repo.getByMovie(movieId + "123");
+
+        assertEquals(0, actors.size());
+    }
+
+    @Test
+    public void saveAddChanges() {
+
+        val originalActor = ActorsObjectMother.getRandomEntity();
+        crudRepository.save(originalActor);
+        originalActor.setFirstName("fn");
+        originalActor.setLastName("ln");
+        originalActor.setLikes(123);
+
+        repo.save(List.of(ActorMapper.INSTANCE.toDomain(originalActor)));
+
+        val savedActor = crudRepository.getOne(originalActor.getId());
+        assertNotNull(savedActor);
+        assertTrue(originalActor.getFirstName().equals(savedActor.getFirstName()));
+        assertTrue(originalActor.getLastName().equals(savedActor.getLastName()));
+        assertEquals(savedActor.getLikes(), originalActor.getLikes());
+
+    }
+
+    private void addActorWithMovie(String movieId){
+        val entity = ActorsObjectMother.getRandomEntity();
+        entity.getMovies().stream().findFirst().get().setReference(movieId);
+        crudRepository.save(entity);
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.moviesapi.domain;
+package com.example.actorsapi.domain;
 
 import com.example.shared.domain.DomainEvent;
 import lombok.Getter;
@@ -8,14 +8,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class LikeMovieDomainEvent extends DomainEvent {
 
     int likes;
-
-    public LikeMovieDomainEvent(@NonNull String eventId, @NonNull String aggregateRootId, int likes){
-        super(eventId, aggregateRootId, new Date());
-        this.likes = likes;
-    }
 }
