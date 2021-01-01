@@ -34,6 +34,7 @@
         <lombok.version>1.18.16</lombok.version>
         <pipeliner.version>0.5</pipeliner.version>
         <faker.version>1.0.2</faker.version>
+        <eureka.client.version>3.0.0</eureka.client.version>
     </properties>
 
     <dependencies>
