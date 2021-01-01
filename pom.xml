@@ -9,6 +9,7 @@
         <module>shared</module>
         <module>moviesapi</module>
         <module>actorsapi</module>
+        <module>eureka-server</module>
     </modules>
 
     <parent>
@@ -35,6 +36,7 @@
         <pipeliner.version>0.5</pipeliner.version>
         <faker.version>1.0.2</faker.version>
         <eureka.client.version>3.0.0</eureka.client.version>
+        <spring-cloud.version>2020.0.0</spring-cloud.version>
     </properties>
 
     <dependencies>
