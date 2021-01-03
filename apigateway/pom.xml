@@ -11,7 +11,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>moviesapi</artifactId>
+    <artifactId>apigateway</artifactId>
     <version>${revision}</version>
     <name>apigateway</name>
     <description>Api Gateway</description>
@@ -44,6 +44,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <version>1.4.7.RELEASE</version>
         </dependency>
     </dependencies>
 
