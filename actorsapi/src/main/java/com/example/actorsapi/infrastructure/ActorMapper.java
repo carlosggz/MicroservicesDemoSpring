@@ -29,7 +29,7 @@ public interface ActorMapper {
                 actorEntity.getFirstName(),
                 actorEntity.getLastName(),
                 actorEntity.getLikes(),
-                actorEntity.getMovies().stream().map(MovieEntity::getReference).collect(Collectors.toSet())
+                actorEntity.getMovies().stream().map(MovieEntity::getMovieId).collect(Collectors.toSet())
         );
     }
 }

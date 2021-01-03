@@ -132,15 +132,14 @@ class ActorsRepositoryImplTest {
 
         val savedActor = crudRepository.getOne(originalActor.getId());
         assertNotNull(savedActor);
-        assertTrue(originalActor.getFirstName().equals(savedActor.getFirstName()));
-        assertTrue(originalActor.getLastName().equals(savedActor.getLastName()));
+        assertEquals(savedActor.getFirstName(), originalActor.getFirstName());
+        assertEquals(savedActor.getLastName(), originalActor.getLastName());
         assertEquals(savedActor.getLikes(), originalActor.getLikes());
 
     }
 
     private void addActorWithMovie(String movieId){
-        val entity = ActorsObjectMother.getRandomEntity();
-        entity.getMovies().stream().findFirst().get().setReference(movieId);
+        val entity = ActorsObjectMother.getRandomEntity(movieId);
         crudRepository.save(entity);
     }
 }

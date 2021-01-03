@@ -11,19 +11,16 @@ import java.io.Serializable;
 @Entity
 @Builder
 @AllArgsConstructor
-@ToString(exclude = {"actor", "id", "reference"})
+@ToString
 @Table(name = "movie")
 public class MovieEntity implements Serializable  {
 
     @Id
-    @Column(length = 50, columnDefinition = "varchar(50)", updatable = false, nullable = false )
+    @Column(name = "id", length = 50, columnDefinition = "varchar(50)", updatable = false, nullable = false )
     private String id;
 
-    @Column(length = 50, columnDefinition = "varchar(50)", updatable = false, nullable = false )
-    private String reference;
-
-    @Column(length = 255, columnDefinition = "varchar(100)", updatable = true, nullable = false )
-    private String title;
+    @Column(name = "movie_id", length = 50, columnDefinition = "varchar(50)", updatable = false, nullable = false )
+    private String movieId;
 
     @ManyToOne
     @JoinColumn(name = "actor_id")

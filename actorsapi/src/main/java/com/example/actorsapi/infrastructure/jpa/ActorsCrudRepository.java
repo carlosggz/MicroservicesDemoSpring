@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ActorsCrudRepository extends JpaRepository<ActorEntity, String> {
-    List<ActorEntity> findByMovies_reference(String movieId);
+    List<ActorEntity> findByMovies_movieId(String movieId);
 }

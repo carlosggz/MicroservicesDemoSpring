@@ -44,7 +44,7 @@ public class ActorsRepositoryImpl implements ActorsRepository {
     public List<Actor> getByMovie(@NonNull String movieId) {
 
         return actorsCrudRepository
-                .findByMovies_reference(movieId)
+                .findByMovies_movieId(movieId)
                 .stream()
                 .map(ActorMapper.INSTANCE::toDomain)
                 .collect(Collectors.toList());

@@ -45,4 +45,15 @@ public class MoviesRepositoryImpl implements MoviesRepository {
         val entity = MovieMapper.INSTANCE.toEntity(movie);
         repository.save(entity);
     }
+
+    @Override
+    public List<MovieDto> getInList(@NonNull List<String> ids) {
+        return ids.size() == 0
+                ? new ArrayList<>()
+                : repository
+                    .findAllById(ids)
+                    .stream()
+                    .map(MovieMapper.INSTANCE::toDto)
+                    .collect(Collectors.toList());
+    }
 }

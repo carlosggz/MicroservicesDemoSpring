@@ -2,6 +2,7 @@ package com.example.moviesapi.controllers;
 
 import an.awesome.pipelinr.Pipeline;
 import com.example.moviesapi.application.GetMovieDetailsQuery;
+import com.example.moviesapi.application.GetMoviesInListQuery;
 import com.example.moviesapi.application.GetMoviesQuery;
 import com.example.moviesapi.application.LikeCommand;
 import com.example.moviesapi.config.Constants;
@@ -39,4 +40,7 @@ public class MoviesController {
         val result = pipeline.send(new LikeCommand(id));
         return new ResponseEntity(result ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/search")
+    public List<MovieDto> like(@RequestBody List<String> ids) { return pipeline.send(new GetMoviesInListQuery(ids)); }
 }

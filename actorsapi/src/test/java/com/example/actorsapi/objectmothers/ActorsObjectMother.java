@@ -27,11 +27,17 @@ public final class ActorsObjectMother {
         return actor;
     }
 
+    public static ActorEntity getRandomEntity(String movieId){
+        val entity = ActorsObjectMother.getRandomEntity();
+        entity.getMovies().stream().findFirst().get().setMovieId(movieId);
+        return entity;
+    }
+
     public static ActorDto getRandomDto() {
         return new ActorDto(UUID.randomUUID().toString(), faker.name().fullName());
     }
 
     private static MovieEntity getRandomMovieEntity(ActorEntity actor) {
-        return new MovieEntity(UUID.randomUUID().toString(), "M" + faker.random().nextInt(1, 10).toString(), faker.name().title(), actor);
+        return new MovieEntity(UUID.randomUUID().toString(), "M" + faker.random().nextInt(1, 10).toString(), actor);
     }
 }

@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MoviesRepository {
-    public List<MovieDto> getAll();
+    List<MovieDto> getAll();
     Optional<Movie> getById(@NonNull String id);
     void save(@NonNull Movie movie);
+    List<MovieDto> getInList(@NonNull List<String> ids);
 }

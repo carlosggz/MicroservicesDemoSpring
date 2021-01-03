@@ -2,10 +2,12 @@ package com.example.moviesapi.controllers;
 
 import an.awesome.pipelinr.Pipeline;
 import com.example.moviesapi.application.GetMovieDetailsQuery;
+import com.example.moviesapi.application.GetMoviesInListQuery;
 import com.example.moviesapi.application.GetMoviesQuery;
 import com.example.moviesapi.application.LikeCommand;
 import com.example.moviesapi.config.Constants;
 import com.example.moviesapi.objectmothers.MoviesObjectMother;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +52,7 @@ class MoviesControllerTest {
     }
 
     @Test
-    void getAllMovies() throws Exception {
+    void getAllMoviesReturnsTheMoviesList() throws Exception {
 
         val items = List.of(
                 MoviesObjectMother.getRandomDto(),
@@ -112,5 +114,30 @@ class MoviesControllerTest {
         mockMvc
                 .perform(post(Constants.MOVIES_BASE_URL + "/" + entity.getId()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void getMoviesInListReturnsTheList() throws Exception {
+
+        val items = List.of(
+                MoviesObjectMother.getRandomDto(),
+                MoviesObjectMother.getRandomDto(),
+                MoviesObjectMother.getRandomDto()
+        );
+        when(pipeline.send(any(GetMoviesInListQuery.class))).thenReturn(items);
+        val ids = List.of(
+                items.get(0).getId(),
+                items.get(1).getId(),
+                items.get(2).getId()
+        );
+        val mapper = new ObjectMapper();
+        val json = mapper.writeValueAsString(ids);
+
+        mockMvc
+                .perform(post(Constants.MOVIES_BASE_URL + "/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", hasSize(items.size())));
     }
 }

@@ -110,4 +110,32 @@ class MoviesRepositoryImplTest {
         assertNotNull(entity);
         assertEquals(entity, MovieMapper.INSTANCE.toEntity(domainEntity));
     }
+
+    @Test
+    public void getInListWithEmptyListReturnsAnEmptyList() {
+
+        val result = repo.getInList(new ArrayList<>());
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void getInListReturnsSearchedItems() {
+
+        val items = List.of(
+                MoviesObjectMother.getRandomEntity(),
+                MoviesObjectMother.getRandomEntity(),
+                MoviesObjectMother.getRandomEntity());
+        val first = items.get(0).getId();
+        val third = items.get(2).getId();
+
+        items.forEach(x -> crudRepository.save(x));
+
+        val result = repo.getInList(List.of(first, third));
+
+        assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(x -> x.getId().equals(first)));
+        assertTrue(result.stream().anyMatch(x -> x.getId().equals(third)));
+    }
 }
