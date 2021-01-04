@@ -13,3 +13,7 @@ spring:
           uri: lb://actors-api
           predicates:
             - Path=/api/v1/actors/**
+
+custom:
+  actor_details: http://actors-api/api/v1/actors/{id}
+  movie_search: http://movies-api/api/v1/movies/search
