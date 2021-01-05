@@ -1,0 +1,30 @@
+package com.example.identityserver.infrastucture;
+
+import lombok.AllArgsConstructor;
+import lombok.val;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
+@Service
+@Primary
+public class JpaUserDetailsService implements UserDetailsService {
+
+    UserRepository repository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        val user = repository.findById(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        return new User(user.getUserName(), user.getPassword(), List.of(user.getRole()));
+    }
+}
