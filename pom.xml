@@ -12,6 +12,7 @@
         <module>eureka-server</module>
         <module>config-server</module>
         <module>apigateway</module>
+        <module>identity-server</module>
     </modules>
 
     <properties>

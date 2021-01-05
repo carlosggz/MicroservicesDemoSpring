@@ -141,5 +141,10 @@ Desktop.ini
 .eslintcache
 
 
-/moviesapi/target/
-/shared/target/
+/moviesapi/target
+/shared/target
+/actorsapi/target
+/apigateway/target
+/config-server/target
+/eureka-server/target
+/identity-server/target
