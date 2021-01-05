@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,7 +26,7 @@ public class JwtTokenUtil implements Serializable {
 	@Serial
 	private static final long serialVersionUID = -2550185165626007488L;
 	
-	public static final long JWT_TOKEN_VALIDITY = 5*60*60;
+	public static final long JWT_TOKEN_VALIDITY = 24*60*60; //24 hours
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -39,6 +41,11 @@ public class JwtTokenUtil implements Serializable {
 
 	public Date getExpirationDateFromToken(String token) {
 		return getClaimFromToken(token, Claims::getExpiration);
+	}
+
+	public List<GrantedAuthority> getAuthorities(String token) {
+		val role = getClaimFromToken(token, x -> x.get(JwtTokenUtil.ROLE, String.class));
+		return List.of(new SimpleGrantedAuthority(role));
 	}
 
 	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {

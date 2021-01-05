@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AggregationsControllerTest {
 
+    private static final String HEADER = "Bearer something";
     ActorDetailsService actorDetailsService;
     AggregationsController controller;
 
@@ -41,9 +42,9 @@ class AggregationsControllerTest {
     void getInvalidActorReturnsNotFound() throws ExecutionException, InterruptedException {
 
         val id = "123";
-        when(actorDetailsService.getActor(id)).thenReturn(Mono.just(Optional.empty()));
+        when(actorDetailsService.getActor(id, HEADER)).thenReturn(Mono.just(Optional.empty()));
 
-        val result = controller.getActorDetails(id).block();
+        val result = controller.getActorDetails(id, HEADER).block();
 
         assertNotNull(result);
         assertEquals(HttpStatus.NOT_FOUND ,result.getStatusCode());
@@ -68,9 +69,9 @@ class AggregationsControllerTest {
 
         val expected = new ActorDetailsDto(actor, movies);
 
-        when(actorDetailsService.getActor(actor.getId())).thenReturn(Mono.just(Optional.of(expected)));
+        when(actorDetailsService.getActor(actor.getId(), HEADER)).thenReturn(Mono.just(Optional.of(expected)));
 
-        val result = controller.getActorDetails(actor.getId()).block();
+        val result = controller.getActorDetails(actor.getId(), HEADER).block();
 
         assertNotNull(result);
         assertEquals(HttpStatus.OK ,result.getStatusCode());

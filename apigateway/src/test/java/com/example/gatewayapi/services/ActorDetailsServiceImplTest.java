@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ActorDetailsServiceImplTest {
 
+    private static final String HEADER = "Bearer something";
+
     MockWebServer mockWebServer;
     ActorDetailsServiceImpl actorDetailsService;
 
@@ -52,7 +54,7 @@ class ActorDetailsServiceImplTest {
     void getActorWithNullIdReturnsEmpty() throws ExecutionException, InterruptedException {
 
         val result = actorDetailsService
-                .getActor(null)
+                .getActor(null, HEADER)
                 .block();
 
         assertNotNull(result);
@@ -63,7 +65,7 @@ class ActorDetailsServiceImplTest {
     void getActorWithEmptyIdReturnsEmpty() throws ExecutionException, InterruptedException {
 
         val result = actorDetailsService
-                .getActor("")
+                .getActor("", HEADER)
                 .block();
 
         assertNotNull(result);
@@ -78,7 +80,7 @@ class ActorDetailsServiceImplTest {
         mockWebServer.enqueue(getResponse(actor));
 
         val result = actorDetailsService
-                .getActor(actor.getId())
+                .getActor(actor.getId(), HEADER)
                 .block();
 
         assertNotNull(result);
@@ -96,7 +98,7 @@ class ActorDetailsServiceImplTest {
         mockWebServer.enqueue(getResponse(movies));
 
         val result = actorDetailsService
-                .getActor(actor.getId())
+                .getActor(actor.getId(), HEADER)
                 .block();
 
         assertNotNull(result);

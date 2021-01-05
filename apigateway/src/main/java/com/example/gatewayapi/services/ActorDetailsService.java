@@ -8,5 +8,5 @@ import java.util.concurrent.ExecutionException;
 
 public interface ActorDetailsService {
 
-    Mono<Optional<ActorDetailsDto>> getActor(String id) throws ExecutionException, InterruptedException;
+    Mono<Optional<ActorDetailsDto>> getActor(String id, String authorization) throws ExecutionException, InterruptedException;
 }

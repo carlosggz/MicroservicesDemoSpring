@@ -31,34 +31,36 @@ public class ActorDetailsServiceImpl implements ActorDetailsService {
     }
 
     @Override
-    public Mono<Optional<ActorDetailsDto>> getActor(String id) throws ExecutionException, InterruptedException {
+    public Mono<Optional<ActorDetailsDto>> getActor(String id, String authorization) throws ExecutionException, InterruptedException {
 
         if (id == null || id.trim().length() == 0)
             return Mono.just(Optional.empty());
 
-        return getActorResponse(id)
+        return getActorResponse(id, authorization)
                 .flatMap(actor -> (actor.getMovies() == null || actor.getMovies().size() == 0)
                         ? Mono.just(Optional.of(new ActorDetailsDto(actor, new ArrayList<>())))
-                        : getMovies(new ArrayList<>(actor.getMovies()))
+                        : getMovies(new ArrayList<>(actor.getMovies()), authorization)
                             .collectList()
                             .flatMap(movies -> Mono.just(Optional.of(new ActorDetailsDto(actor, movies)))));
     }
 
-    Mono<Actor> getActorResponse(String id) {
+    Mono<Actor> getActorResponse(String id, String authorization) {
 
         return webClientBuilder
                 .build()
                 .get()
                 .uri(actorDetailsUri, id)
+                .header("Authorization", authorization)
                 .retrieve()
                 .bodyToMono(Actor.class);
     }
 
-    Flux<Movie> getMovies(List<String> ids){
+    Flux<Movie> getMovies(List<String> ids, String authorization){
         return webClientBuilder
                 .build()
                 .post()
                 .uri(moviesSearchUri)
+                .header("Authorization", authorization)
                 .body(Mono.just(ids), List.class)
                 .retrieve()
                 .bodyToFlux(Movie.class);
