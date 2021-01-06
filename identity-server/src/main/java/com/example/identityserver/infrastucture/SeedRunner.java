@@ -21,6 +21,7 @@ public class SeedRunner implements CommandLineRunner {
             return;
         }
 
-        userRepository.save(new User("demo", pwdEncoder.encode("demo"), UserRole.ADMIN));
+        userRepository.save(new User("user", pwdEncoder.encode("user"), UserRole.USER));
+        userRepository.save(new User("admin", pwdEncoder.encode("admin"), UserRole.ADMIN));
     }
 }
