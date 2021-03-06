@@ -30,9 +30,10 @@ The first service to run, must be the Eureka server, then the config server, and
 rest of the services.
 
 All services are secured, so, the first step must be the authentication. The authorization
-uses a bearer token, that you must use on each call. For example:
+uses a bearer token, that you must include on each call. You can use the postman collection 
+available as part of the project, or you can do it using any other tool. For example:
 
-curl --location --request POST 'http://localhost:8085/authenticate' \
+curl --location --request POST 'http://localhost:8084/authenticate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 "username": "user",
@@ -51,7 +52,3 @@ curl --location --request GET 'http://localhost:8084/api/v1/movies' \
 --header 'Authorization: Bearer my-jwt-token'
 
 
-
-#### TODO:
-- Add a readme for each service
-- Dockerize the project
