@@ -6,7 +6,10 @@ import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,20 +23,11 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class GetMoviesInListHandlerTest {
 
+    @MockBean
     MoviesRepository repository;
+
+    @Autowired
     GetMoviesInListHandler handler;
-
-    @BeforeEach
-    public void setUp()  {
-        repository = mock(MoviesRepository.class);
-        handler = new GetMoviesInListHandler(repository);
-    }
-
-    @AfterEach
-    public void cleanUp(){
-        handler = null;
-        repository = null;
-    }
 
     @Test
     void handleEmptyListReturnEmptyList() {

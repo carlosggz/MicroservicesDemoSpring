@@ -10,7 +10,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,23 +24,14 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class LikeHandlerTest {
 
+    @MockBean
     MoviesRepository repository;
+
+    @MockBean
     EventBus eventBus;
+
+    @Autowired
     LikeHandler handler;
-
-    @BeforeEach
-    public void setUp()  {
-        repository = mock(MoviesRepository.class);
-        eventBus = mock(EventBus.class);
-        handler = new LikeHandler(repository, eventBus);
-    }
-
-    @AfterEach
-    public void cleanUp(){
-        handler = null;
-        repository = null;
-        eventBus = null;
-    }
 
     @Test
     public void likeNonExistingItemThrowsException() {

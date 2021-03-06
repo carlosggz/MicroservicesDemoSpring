@@ -13,7 +13,9 @@ import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Matchers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
@@ -37,15 +39,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class MoviesControllerTest {
 
+    @MockBean
     Pipeline pipeline;
+
+    @Autowired
     MoviesController moviesController;
+
     MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        pipeline = mock(Pipeline.class);
-        moviesController = new MoviesController(pipeline);
-
         mockMvc = MockMvcBuilders
                 .standaloneSetup(moviesController)
                 .build();

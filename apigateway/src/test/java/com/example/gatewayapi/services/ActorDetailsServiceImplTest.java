@@ -23,13 +23,12 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 class ActorDetailsServiceImplTest {
 
     private static final String HEADER = "Bearer something";
 
     MockWebServer mockWebServer;
-    ActorDetailsServiceImpl actorDetailsService;
+    ActorDetailsService actorDetailsService;
 
     ObjectMapper mapper = new ObjectMapper();
 

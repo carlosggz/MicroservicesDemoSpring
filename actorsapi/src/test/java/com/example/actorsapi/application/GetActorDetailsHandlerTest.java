@@ -6,7 +6,9 @@ import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,20 +20,11 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class GetActorDetailsHandlerTest {
 
+    @MockBean
     ActorsRepository repository;
+
+    @Autowired
     GetActorDetailsHandler handler;
-
-    @BeforeEach
-    public void setUp()  {
-        repository = mock(ActorsRepository.class);
-        handler = new GetActorDetailsHandler(repository);
-    }
-
-    @AfterEach
-    public void cleanUp(){
-        handler = null;
-        repository = null;
-    }
 
     @Test
     void handleReturnNonNullResult() {

@@ -13,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -26,20 +28,11 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class GetMoviesHandlerTest {
 
+    @MockBean
     MoviesRepository repository;
+
+    @Autowired
     GetMoviesHandler handler;
-
-    @BeforeEach
-    public void setUp()  {
-        repository = mock(MoviesRepository.class);
-        handler = new GetMoviesHandler(repository);
-    }
-
-    @AfterEach
-    public void cleanUp(){
-        handler = null;
-        repository = null;
-    }
 
     @Test
     void handleReturnNonNullResult() {

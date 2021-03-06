@@ -9,6 +9,10 @@ import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
@@ -21,22 +25,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class AggregationsControllerTest {
 
     private static final String HEADER = "Bearer something";
+
+    @Mock
     ActorDetailsService actorDetailsService;
+
+    @InjectMocks
     AggregationsController controller;
-
-    @BeforeEach
-    public void setup(){
-        actorDetailsService = mock(ActorDetailsService.class);
-        controller = new AggregationsController(actorDetailsService);
-    }
-
-    @AfterEach
-    public void cleanup(){
-        actorDetailsService = null;
-    }
 
     @Test
     void getInvalidActorReturnsNotFound() throws ExecutionException, InterruptedException {

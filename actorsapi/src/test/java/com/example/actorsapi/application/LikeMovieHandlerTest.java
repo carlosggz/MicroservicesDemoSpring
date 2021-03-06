@@ -4,12 +4,15 @@ import com.example.actorsapi.domain.Actor;
 import com.example.actorsapi.domain.ActorsRepository;
 import com.example.actorsapi.domain.LikeMovieDomainEvent;
 import com.example.actorsapi.objectmothers.ActorsObjectMother;
+import com.netflix.discovery.converters.Auto;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,20 +26,11 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class LikeMovieHandlerTest {
 
+    @MockBean
     ActorsRepository repository;
+
+    @Autowired
     LikeMovieHandler handler;
-
-    @BeforeEach
-    public void setUp()  {
-        repository = mock(ActorsRepository.class);
-        handler = new LikeMovieHandler(repository);
-    }
-
-    @AfterEach
-    public void cleanUp(){
-        handler = null;
-        repository = null;
-    }
 
     @Test
     void handleWithResultsIncreaseByOneEachActorLikes() {

@@ -5,7 +5,13 @@ import lombok.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -15,6 +21,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
+@ExtendWith(MockitoExtension.class)
 class RabbitEventBusTest {
 
     @NoArgsConstructor
@@ -33,20 +40,11 @@ class RabbitEventBusTest {
         }
     }
 
+    @Mock
     RabbitTemplate rabbitTemplate;
+
+    @InjectMocks
     RabbitEventBus eventBus;
-
-    @BeforeEach
-    public void setup(){
-        rabbitTemplate = mock(RabbitTemplate.class);
-        eventBus = new RabbitEventBus(rabbitTemplate);
-    }
-
-    @AfterEach
-    public void clear(){
-        eventBus = null;
-        rabbitTemplate = null;
-    }
 
     @Test
     void publishToQueueCallsAllItems() {
