@@ -421,6 +421,113 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Config",
+			"item": [
+				{
+					"name": "Get property value",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ConfigPassword",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ConfigUser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/my-property/default/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"my-property",
+								"default",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Encrypt text",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "My text to encrypt"
+						},
+						"url": {
+							"raw": "http://localhost:8083/encrypt",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"encrypt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decrypt text",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "7e60ca0871d081b8e3a58e5ec3d5bdfe38075363e17109863a6c6474e46c00b6ad5112aeda6fce0af4e61ff06cf9e659"
+						},
+						"url": {
+							"raw": "http://localhost:8083/decrypt",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"decrypt"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	]
 }
