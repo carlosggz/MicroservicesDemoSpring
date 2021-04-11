@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>shared</artifactId>
+    <version>${revision}</version>
     <name>shared</name>
     <description>Shared Module</description>
 

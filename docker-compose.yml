@@ -1,0 +1,97 @@
+version: '3.4'
+
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - '5672:5672'
+            - '15672:15672'    
+        networks:
+            - my-network            
+    eureka:
+        image: spring-eureka:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8761:8761"
+        environment:
+            - PROJECT=eureka-server     
+            - JAR=/app/eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar    
+        networks:
+            - my-network            
+    config:
+        image: spring-config:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8083:8083"
+        environment:
+            - PROJECT=config-server     
+            - JAR=/app/config-server/target/config-server-0.0.1-SNAPSHOT.jar 
+            - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+        networks:
+            - my-network                       
+    identity:
+        image: spring-identity:latest
+        build:
+            context: .
+            dockerfile: Dockerfile      
+        ports:
+            - "8085:8085"
+        environment:
+            - PROJECT=identity-server     
+            - JAR=/app/identity-server/target/identity-server-0.0.1-SNAPSHOT.jar
+            - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+            - CONFIG_SERVER_URL=http://config:8083
+        networks:
+            - my-network                              
+    movies:
+        image: spring-movies:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8081:8081"
+        environment:
+            - PROJECT=moviesapi    
+            - JAR=/app/moviesapi/target/moviesapi-0.0.1-SNAPSHOT.jar    
+            - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+            - CONFIG_SERVER_URL=http://config:8083
+            - RABBIT_HOST=rabbitmq            
+        networks:
+            - my-network                        
+    actors:
+        image: spring-actors:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8082:8082"
+        environment:
+            - PROJECT=actorsapi    
+            - JAR=/app/actorsapi/target/actorsapi-0.0.1-SNAPSHOT.jar    
+            - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+            - CONFIG_SERVER_URL=http://config:8083   
+            - RABBIT_HOST=rabbitmq           
+        networks:
+            - my-network            
+    gateway:
+        image: spring-gateway:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8084:8084"
+        environment:
+            - PROJECT=apigateway     
+            - JAR=/app/apigateway/target/apigateway-0.0.1-SNAPSHOT.jar   
+            - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+            - CONFIG_SERVER_URL=http://config:8083                
+        networks:
+            - my-network    
+
+networks:
+    my-network:
+        driver: bridge
