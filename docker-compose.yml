@@ -31,6 +31,8 @@ services:
             - PROJECT=config-server     
             - JAR=/app/config-server/target/config-server-0.0.1-SNAPSHOT.jar 
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
+        depends_on: 
+            - eureka
         networks:
             - my-network                       
     identity:
@@ -46,7 +48,10 @@ services:
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083
         networks:
-            - my-network                              
+            - my-network 
+        depends_on: 
+            - eureka
+            - config                             
     movies:
         image: spring-movies:latest
         build:
@@ -61,7 +66,11 @@ services:
             - CONFIG_SERVER_URL=http://config:8083
             - RABBIT_HOST=rabbitmq            
         networks:
-            - my-network                        
+            - my-network    
+        depends_on: 
+            - eureka
+            - config
+            - rabbitmq                    
     actors:
         image: spring-actors:latest
         build:
@@ -76,7 +85,11 @@ services:
             - CONFIG_SERVER_URL=http://config:8083   
             - RABBIT_HOST=rabbitmq           
         networks:
-            - my-network            
+            - my-network      
+        depends_on: 
+            - eureka
+            - config
+            - rabbitmq                     
     gateway:
         image: spring-gateway:latest
         build:
@@ -90,8 +103,13 @@ services:
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083                
         networks:
-            - my-network    
-
+            - my-network 
+        depends_on: 
+            - eureka
+            - config
+            - movies
+            - actors  
+        restart: unless-stopped
 networks:
     my-network:
         driver: bridge
