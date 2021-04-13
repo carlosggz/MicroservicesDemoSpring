@@ -1,6 +1,7 @@
 package com.example.shared.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,19 +16,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final UserDetailsService jwtUserDetailsService;
+	private final JwtRequestFilter jwtRequestFilter;
+	private final String[] ignoredPaths;
 
-	@Autowired
-	private UserDetailsService jwtUserDetailsService;
-
-	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	public WebSecurityConfig(
+			JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+			UserDetailsService jwtUserDetailsService,
+			JwtRequestFilter jwtRequestFilter,
+			@Value("${app.security.ignore-paths}") String[] paths) {
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.jwtUserDetailsService = jwtUserDetailsService;
+		this.jwtRequestFilter = jwtRequestFilter;
+		this.ignoredPaths = Optional.ofNullable(paths).orElse(new String[0]);
+	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -51,14 +63,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		// We don't need CSRF for this example
-		httpSecurity.csrf().disable()
-				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/authenticate", "/h2-console/**").permitAll()
+		httpSecurity
+				.csrf().disable()
+				// dont authenticate ignored paths
+				.authorizeRequests().antMatchers(ignoredPaths).permitAll()
 				// all other requests need to be authenticated
-				.anyRequest().authenticated().and().
-				// make sure we use stateless session; session won't be used to
-				// store user's state.
-				exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				.anyRequest().authenticated().and()
+				// throws un-authorized error
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+				//session won't be used to store user's state
+				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		httpSecurity.headers().frameOptions().disable();

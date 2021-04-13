@@ -47,6 +47,7 @@ services:
             - JAR=/app/identity-server/target/identity-server-0.0.1-SNAPSHOT.jar
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083
+            - ALLOW_SWAGGER_UI=false
         networks:
             - my-network 
         depends_on: 
@@ -64,7 +65,8 @@ services:
             - JAR=/app/moviesapi/target/moviesapi-0.0.1-SNAPSHOT.jar    
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083
-            - RABBIT_HOST=rabbitmq            
+            - RABBIT_HOST=rabbitmq   
+            - ALLOW_SWAGGER_UI=false         
         networks:
             - my-network    
         depends_on: 
@@ -83,7 +85,8 @@ services:
             - JAR=/app/actorsapi/target/actorsapi-0.0.1-SNAPSHOT.jar    
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083   
-            - RABBIT_HOST=rabbitmq           
+            - RABBIT_HOST=rabbitmq  
+            - ALLOW_SWAGGER_UI=false         
         networks:
             - my-network      
         depends_on: 
