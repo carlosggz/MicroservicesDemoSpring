@@ -13,10 +13,11 @@ To execute the application using docker, just run the docker compose at the root
 
 docker-compose up --build
 
-To execute the application locally, you must have access to a RabbitMQ broker. If you don't have 
-one, you can run use a docker image. For example:
+To execute the application locally, you must have access to a RabbitMQ broker and a Zipkin server. If you don't have them, you can run them using docker images. For example:
 
-docker run -d --name my-rabbit -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+        docker run -d --name my-rabbit -p 4369:4369 -p 5671:5671 -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+
+        docker run -d --name=my-zipkin -p 9411:9411 openzipkin/zipkin
 
 All services are using the config server, so, you must have a repository for it. The application uses a sample repository with a shared property.
 
@@ -30,22 +31,20 @@ All services are secured, so, the first step must be the authentication. The aut
 uses a bearer token, that you must include on each call. You can use the postman collection 
 available as part of the project, or you can do it using any other tool. For example:
 
-curl --location --request POST 'http://localhost:8084/authenticate' \
---header 'Content-Type: application/json' \
---data-raw '{
-"username": "user",
-"password": "user"
-}'
+    curl --location --request POST 'http://localhost:8084/authenticate' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+    "username": "user",
+    "password": "user"
+    }'
 
 The response will be something like:
 
-{
-"token": "my-jwt-token"
-}
+    { "token": "my-jwt-token"   }
 
 Then, a call to an endpoint using the gateway:
 
-curl --location --request GET 'http://localhost:8084/api/v1/movies' \
---header 'Authorization: Bearer my-jwt-token'
+    curl --location --request GET 'http://localhost:8084/api/v1/movies' \
+    --header 'Authorization: Bearer my-jwt-token'
 
 

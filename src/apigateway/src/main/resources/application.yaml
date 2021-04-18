@@ -17,7 +17,10 @@ spring:
           uri: lb://identity-server
           predicates:
             - Path=/authenticate
+  zipkin:
+    enabled: ${USE_ZIPKIN:true}
+    base-url: ${ZIPKIN_URL:http://localhost:9411/}
 
-custom:
+app:
   actor_details: http://actors-api/api/v1/actors/{id}
   movie_search: http://movies-api/api/v1/movies/search

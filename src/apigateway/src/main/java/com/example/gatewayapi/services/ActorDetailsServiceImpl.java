@@ -23,8 +23,8 @@ public class ActorDetailsServiceImpl implements ActorDetailsService {
 
     public ActorDetailsServiceImpl(
             WebClient.Builder webClientBuilder,
-            @Value("${custom.actor_details}") String actorDetailsUri,
-            @Value("${custom.movie_search}") String moviesSearchUri) {
+            @Value("${app.actor_details}") String actorDetailsUri,
+            @Value("${app.movie_search}") String moviesSearchUri) {
         this.webClientBuilder = webClientBuilder;
         this.actorDetailsUri = actorDetailsUri;
         this.moviesSearchUri = moviesSearchUri;

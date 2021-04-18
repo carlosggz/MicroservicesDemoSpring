@@ -7,7 +7,13 @@ services:
             - '5672:5672'
             - '15672:15672'    
         networks:
-            - my-network            
+            - my-network  
+    zipkin:
+        image: openzipkin/zipkin
+        ports:
+            - '9411:9411'
+        networks:
+            - my-network  
     eureka:
         image: spring-eureka:latest
         build:
@@ -48,11 +54,14 @@ services:
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083
             - ALLOW_SWAGGER_UI=false
+            - USE_ZIPKIN=true
+            - ZIPKIN_URL=http://zipkin:9411
         networks:
             - my-network 
         depends_on: 
             - eureka
             - config 
+            - zipkin
         restart: unless-stopped                            
     movies:
         image: spring-movies:latest
@@ -67,13 +76,16 @@ services:
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083
             - RABBIT_HOST=rabbitmq   
-            - ALLOW_SWAGGER_UI=false         
+            - ALLOW_SWAGGER_UI=false 
+            - USE_ZIPKIN=true
+            - ZIPKIN_URL=http://zipkin:9411
         networks:
             - my-network    
         depends_on: 
             - eureka
             - config
-            - rabbitmq     
+            - rabbitmq   
+            - zipkin  
         restart: unless-stopped               
     actors:
         image: spring-actors:latest
@@ -88,13 +100,16 @@ services:
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
             - CONFIG_SERVER_URL=http://config:8083   
             - RABBIT_HOST=rabbitmq  
-            - ALLOW_SWAGGER_UI=false         
+            - ALLOW_SWAGGER_UI=false  
+            - USE_ZIPKIN=true
+            - ZIPKIN_URL=http://zipkin:9411
         networks:
             - my-network      
         depends_on: 
             - eureka
             - config
-            - rabbitmq    
+            - rabbitmq   
+            - zipkin 
         restart: unless-stopped                 
     gateway:
         image: spring-gateway:latest
@@ -107,7 +122,9 @@ services:
             - PROJECT=apigateway     
             - JAR=/app/apigateway/target/apigateway-0.0.1-SNAPSHOT.jar   
             - EUREKA_SERVER=http://demo:demo@eureka:8761/eureka
-            - CONFIG_SERVER_URL=http://config:8083                
+            - CONFIG_SERVER_URL=http://config:8083  
+            - USE_ZIPKIN=true
+            - ZIPKIN_URL=http://zipkin:9411
         networks:
             - my-network 
         depends_on: 
@@ -115,6 +132,7 @@ services:
             - config
             - movies
             - actors  
+            - zipkin
         restart: unless-stopped
 networks:
     my-network:
