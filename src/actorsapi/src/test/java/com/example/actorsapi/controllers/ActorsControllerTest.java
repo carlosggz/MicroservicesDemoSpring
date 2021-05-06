@@ -8,6 +8,10 @@ import com.example.actorsapi.objectmothers.ActorsObjectMother;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,13 +32,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ActorsControllerTest {
 
-    @MockBean
+    @Mock
     Pipeline pipeline;
 
-    @Autowired
+    @InjectMocks
     ActorsController actorsController;
 
     MockMvc mockMvc;

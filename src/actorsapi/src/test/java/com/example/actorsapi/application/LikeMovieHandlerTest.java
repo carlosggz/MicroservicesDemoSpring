@@ -4,32 +4,29 @@ import com.example.actorsapi.domain.Actor;
 import com.example.actorsapi.domain.ActorsRepository;
 import com.example.actorsapi.domain.LikeMovieDomainEvent;
 import com.example.actorsapi.objectmothers.ActorsObjectMother;
-import com.netflix.discovery.converters.Auto;
 import lombok.val;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class LikeMovieHandlerTest {
 
-    @MockBean
+    @Mock
     ActorsRepository repository;
 
-    @Autowired
+    @InjectMocks
     LikeMovieHandler handler;
 
     @Test

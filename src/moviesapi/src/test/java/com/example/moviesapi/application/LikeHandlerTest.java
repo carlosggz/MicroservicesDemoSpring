@@ -9,7 +9,11 @@ import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,16 +25,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class LikeHandlerTest {
 
-    @MockBean
+    @Mock
     MoviesRepository repository;
 
-    @MockBean
+    @Mock
     EventBus eventBus;
 
-    @Autowired
+    @InjectMocks
     LikeHandler handler;
 
     @Test
