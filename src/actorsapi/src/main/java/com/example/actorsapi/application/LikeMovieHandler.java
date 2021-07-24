@@ -2,21 +2,20 @@ package com.example.actorsapi.application;
 
 import com.example.actorsapi.domain.ActorsRepository;
 import com.example.actorsapi.domain.LikeMovieDomainEvent;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.val;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LikeMovieHandler {
 
     private final ActorsRepository repository;
 
     @Transactional
+    @Synchronized
     public void handle(LikeMovieDomainEvent domainEvent) {
 
        val actors = repository.getByMovie(domainEvent.getAggregateRootId());

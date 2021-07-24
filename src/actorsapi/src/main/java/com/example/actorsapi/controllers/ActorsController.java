@@ -32,6 +32,9 @@ public class ActorsController {
     @GetMapping("{id}")
     public ResponseEntity<Actor> getActor(@PathVariable String id) {
         val result = pipeline.send(new GetActorDetailsQuery(id));
-        return new ResponseEntity<>(result.isEmpty() ? null : result.get(), result.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK);
+        return new ResponseEntity<>(
+                result.orElse(null),
+                result.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK
+        );
     }
 }

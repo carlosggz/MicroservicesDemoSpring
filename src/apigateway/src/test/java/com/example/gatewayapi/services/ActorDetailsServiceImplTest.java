@@ -52,9 +52,7 @@ class ActorDetailsServiceImplTest {
     @Test
     void getActorWithNullIdReturnsEmpty() throws ExecutionException, InterruptedException {
 
-        val result = actorDetailsService
-                .getActor(null, HEADER)
-                .block();
+        val result = actorDetailsService.getActor(null, HEADER);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -63,9 +61,7 @@ class ActorDetailsServiceImplTest {
     @Test
     void getActorWithEmptyIdReturnsEmpty() throws ExecutionException, InterruptedException {
 
-        val result = actorDetailsService
-                .getActor("", HEADER)
-                .block();
+        val result = actorDetailsService.getActor("", HEADER);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -78,9 +74,7 @@ class ActorDetailsServiceImplTest {
         val details = new ActorDetailsDto(actor, new ArrayList<>());
         mockWebServer.enqueue(getResponse(actor));
 
-        val result = actorDetailsService
-                .getActor(actor.getId(), HEADER)
-                .block();
+        val result = actorDetailsService.getActor(actor.getId(), HEADER);
 
         assertNotNull(result);
         assertTrue(result.isPresent());
@@ -96,9 +90,7 @@ class ActorDetailsServiceImplTest {
         mockWebServer.enqueue(getResponse(actor));
         mockWebServer.enqueue(getResponse(movies));
 
-        val result = actorDetailsService
-                .getActor(actor.getId(), HEADER)
-                .block();
+        val result = actorDetailsService.getActor(actor.getId(), HEADER);
 
         assertNotNull(result);
         assertTrue(result.isPresent());

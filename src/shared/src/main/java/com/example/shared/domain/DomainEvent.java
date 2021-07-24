@@ -1,12 +1,13 @@
 package com.example.shared.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.io.Serializable;
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +18,6 @@ public abstract class DomainEvent implements Serializable {
     String eventId;
     String aggregateRootId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-    Date occurrenceDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    LocalDateTime occurrenceDate;
 }

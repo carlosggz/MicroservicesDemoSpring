@@ -1,24 +1,21 @@
 package com.example.shared.infrastructure;
 
 import com.example.shared.domain.DomainEvent;
-import lombok.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +30,7 @@ class RabbitEventBusTest {
         public FakeEvent(
                 String eventId,
                 String aggregateRootId,
-                Date occurrenceDate,
+                LocalDateTime occurrenceDate,
                 String myProperty) {
             super(eventId, aggregateRootId, occurrenceDate);
             this.myProperty = myProperty;
@@ -50,9 +47,9 @@ class RabbitEventBusTest {
     void publishToQueueCallsAllItems() {
 
         val events = List.of(
-                new FakeEvent("ev1", "123", new Date(), "1"),
-                new FakeEvent("ev2", "123", new Date(), "1"),
-                new FakeEvent("ev3", "123", new Date(), "1")
+                new FakeEvent("ev1", "123", LocalDateTime.now(), "1"),
+                new FakeEvent("ev2", "123", LocalDateTime.now(), "1"),
+                new FakeEvent("ev3", "123", LocalDateTime.now(), "1")
         );
 
         eventBus.publishToQueue(events);

@@ -5,25 +5,23 @@ import com.example.moviesapi.config.Constants;
 import com.example.moviesapi.domain.LikeMovieDomainEvent;
 import com.example.moviesapi.domain.MoviesRepository;
 import com.example.shared.domain.EventBus;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LikeHandler implements Command.Handler<LikeCommand, Boolean> {
 
-    MoviesRepository repository;
-    EventBus eventBus;
+    final MoviesRepository repository;
+    final EventBus eventBus;
 
     @Override
     public Boolean handle(LikeCommand command)  {
 
-        if (command.id == null || command.id.trim().length() == 0)
+        if (Objects.isNull(command) || command.id.trim().length() == 0)
             return false;
 
         var value = repository.getById(command.id);

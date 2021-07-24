@@ -40,7 +40,7 @@ class AggregationsControllerTest {
     void getInvalidActorReturnsNotFound() throws ExecutionException, InterruptedException {
 
         val id = "123";
-        when(actorDetailsService.getActor(id, HEADER)).thenReturn(Mono.just(Optional.empty()));
+        when(actorDetailsService.getActor(id, HEADER)).thenReturn(Optional.empty());
 
         val result = controller.getActorDetails(id, HEADER).block();
 
@@ -67,7 +67,7 @@ class AggregationsControllerTest {
 
         val expected = new ActorDetailsDto(actor, movies);
 
-        when(actorDetailsService.getActor(actor.getId(), HEADER)).thenReturn(Mono.just(Optional.of(expected)));
+        when(actorDetailsService.getActor(actor.getId(), HEADER)).thenReturn(Optional.of(expected));
 
         val result = controller.getActorDetails(actor.getId(), HEADER).block();
 

@@ -31,17 +31,18 @@ public class ActorDetailsServiceImpl implements ActorDetailsService {
     }
 
     @Override
-    public Mono<Optional<ActorDetailsDto>> getActor(String id, String authorization) throws ExecutionException, InterruptedException {
+    public Optional<ActorDetailsDto> getActor(String id, String authorization) throws ExecutionException, InterruptedException {
 
-        if (id == null || id.trim().length() == 0)
-            return Mono.just(Optional.empty());
-
-        return getActorResponse(id, authorization)
-                .flatMap(actor -> (actor.getMovies() == null || actor.getMovies().size() == 0)
-                        ? Mono.just(Optional.of(new ActorDetailsDto(actor, new ArrayList<>())))
-                        : getMovies(new ArrayList<>(actor.getMovies()), authorization)
+        return id == null || id.trim().length() == 0
+                ? Optional.empty()
+                : getActorResponse(id, authorization)
+                    .flatMap(actor -> (actor.getMovies() == null || actor.getMovies().size() == 0)
+                        ? Mono.just(Optional.of(new ActorDetailsDto(actor, List.of())))
+                        : getMovies(List.copyOf(actor.getMovies()), authorization)
                             .collectList()
-                            .flatMap(movies -> Mono.just(Optional.of(new ActorDetailsDto(actor, movies)))));
+                            .map(movies -> Optional.of(new ActorDetailsDto(actor, movies)))
+                )
+                .block();
     }
 
     Mono<Actor> getActorResponse(String id, String authorization) {
@@ -55,7 +56,7 @@ public class ActorDetailsServiceImpl implements ActorDetailsService {
                 .bodyToMono(Actor.class);
     }
 
-    Flux<Movie> getMovies(List<String> ids, String authorization){
+    Flux<Movie> getMovies(List<String> ids, String authorization) {
         return webClientBuilder
                 .build()
                 .post()

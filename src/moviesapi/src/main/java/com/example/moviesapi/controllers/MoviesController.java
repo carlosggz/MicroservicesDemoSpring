@@ -8,16 +8,15 @@ import com.example.moviesapi.application.LikeCommand;
 import com.example.moviesapi.config.Constants;
 import com.example.moviesapi.domain.Movie;
 import com.example.moviesapi.domain.MovieDto;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(Constants.MOVIES_BASE_URL)
 public class MoviesController {
@@ -36,9 +35,9 @@ public class MoviesController {
     }
 
     @PostMapping("{id}")
-    public ResponseEntity like(@PathVariable String id) {
+    public ResponseEntity<Boolean> like(@PathVariable String id) {
         val result = pipeline.send(new LikeCommand(id));
-        return new ResponseEntity(result ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(result, result ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/search")

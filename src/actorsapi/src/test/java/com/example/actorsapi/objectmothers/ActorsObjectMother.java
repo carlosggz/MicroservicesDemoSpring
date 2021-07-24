@@ -37,6 +37,15 @@ public final class ActorsObjectMother {
         return new ActorDto(UUID.randomUUID().toString(), faker.name().fullName());
     }
 
+    public static Actor getActorWithMovie(String movieId, int likes){
+        val actor = ActorsObjectMother.getRandomDomainEntity();
+        val movies = new HashSet<String>(actor.getMovies());
+        movies.add(movieId);
+        actor.setMovies(movies);
+        actor.setLikes(likes);
+        return actor;
+    }
+
     private static MovieEntity getRandomMovieEntity(ActorEntity actor) {
         return new MovieEntity(UUID.randomUUID().toString(), "M" + faker.random().nextInt(1, 10).toString(), actor);
     }
