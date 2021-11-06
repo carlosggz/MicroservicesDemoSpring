@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -28,8 +26,13 @@ public class JwtTokenUtil implements Serializable {
 	
 	public static final long JWT_TOKEN_VALIDITY = 24*60*60; //24 hours
 
-	@Value("${jwt.secret}")
-	private String secret;
+	private final String base64EncodedSecret;
+
+	public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
+		base64EncodedSecret = Base64
+				.getEncoder()
+				.encodeToString(secret.getBytes(StandardCharsets.UTF_8));
+	}
 
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -54,7 +57,11 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private Claims getAllClaimsFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		return Jwts
+				.parser()
+				.setSigningKey(base64EncodedSecret)
+				.parseClaimsJws(token)
+				.getBody();
 	}
 
 	private Boolean isTokenExpired(String token) {
@@ -80,14 +87,13 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
-
 		return Jwts
 				.builder()
 				.setClaims(claims)
 				.setSubject(subject)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000))
-				.signWith(SignatureAlgorithm.HS512, secret)
+				.signWith(SignatureAlgorithm.HS512, base64EncodedSecret)
 				.compact();
 	}
 
